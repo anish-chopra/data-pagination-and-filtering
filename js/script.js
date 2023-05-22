@@ -1,30 +1,19 @@
-/*
-Treehouse Techdegree:
-FSJS Project 2 - Data Pagination and Filtering
-*/
+// Gloabl Variables
 
 import {data} from './data.js';
 
 let ArrayNew = data;
+let ul = document.getElementsByClassName('student-list');
+let linkList = document.getElementsByClassName('link-list');
+let studentSearch;
+let activePage = 1;
 
 
+// showPage function - display 9 students on each page
 
-/*
-For assistance:
-   Check out the "Project Resources" section of the Instructions tab: https://teamtreehouse.com/projects/data-pagination-and-filtering#instructions
-   Reach out in your Slack community: https://treehouse-fsjs-102.slack.com/app_redirect?channel=unit-2
-*/
-
-
-
-/*
-Create the `showPage` function
-This function will create and insert/append the elements needed to display a "page" of nine students
-*/
 function showPage(list, page) {
    let startIndex = (page * 9) - 9;
    let endIndex = page * 9;
-   let ul = document.getElementsByClassName('student-list');
    ul[0].innerHTML = "";
    for (let i = startIndex; i >= startIndex && i < endIndex && i < list.length ; i++) {
       let studentHTML = 
@@ -45,15 +34,10 @@ function showPage(list, page) {
 }
 
 
+// addPagination Function - insert pagination buttons
 
 
-/*
-Create the `addPagination` function
-This function will create and insert/append the elements needed for the pagination buttons
-*/
-let activePage = 1;
 function addPagination(list) {
-   let linkList = document.getElementsByClassName('link-list');
    linkList[0].innerHTML = "";
    let numberOfButtons = Math.ceil(list.length / 9);
    for (let i = 0; i < numberOfButtons; i++) {
@@ -78,11 +62,6 @@ function addPagination(list) {
    eventButtons();
 }
 
-
-// Call functions
-
-showPage(ArrayNew, 1)
-addPagination(ArrayNew)
 
 // Function for Event Listeners on Pagination Buttons
 
@@ -112,17 +91,27 @@ function insertSearchBar() {
    `;
    header.insertAdjacentHTML("beforeend", searchBarHTML)
 }
+
+// Call functions for showPage, addPagination, and insertSearchBar
+
+showPage(ArrayNew, 1)
+addPagination(ArrayNew)
 insertSearchBar();
 
 
+// Event listener for student search bar
 
-const studentSearch = document.getElementById('studentSearch');
+studentSearch = document.getElementById('studentSearch');
 studentSearch.addEventListener('keyup', e => {
    let currentValue = e.target.value.toLowerCase();
    ArrayNew = data.filter(element => element.name.first.toLowerCase().includes(currentValue) || element.name.last.toLowerCase().includes(currentValue));
-   console.log(ArrayNew)
+   if (ArrayNew.length == 0) {
+      ul[0].innerHTML = "<h1>No Results</h1>"
+      linkList[0].innerHTML = "";
+   } else {
    showPage(ArrayNew, 1)
    addPagination(ArrayNew)
+}
 });
 
 
